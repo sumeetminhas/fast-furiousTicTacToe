@@ -1,0 +1,11 @@
+.scoreboard {
+    display: flex;
+    font-family: 'Courier New', Courier, monospace; 
+    font-size: 3em;
+    color: black;
+    justify-content: space-around;
+    column-gap: 16px;
+    width: 100%;
+    max-width: 1400px;
+}
+

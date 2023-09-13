@@ -1,0 +1,14 @@
+.Popup {
+    display: flex;
+    font-size: 100px;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    background-color: blue;
+    position: absolute;
+    width: 40vw;
+    height: 40vh;
+    pointer-events: none;
+    top: 100px;
+}
+

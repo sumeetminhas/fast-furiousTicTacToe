@@ -1,0 +1,11 @@
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 8rem);
+    place-content: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.dom{
+    height: 40vmin;
+}
