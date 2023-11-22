@@ -5,6 +5,7 @@ import React, {useState} from 'react';
 import { ScoreBoard } from './components/ScoreBoard';
 import { ResetButton } from './components/resetButton';
 import { Popup } from "./components/Popup";
+import { StatsBoard } from './components/StatsBoard';
 
 function App() {
 
@@ -24,8 +25,9 @@ function App() {
   const [score, setScore] = useState({ domScore: 0 , lukeScore: 0})
   const [gameOver, setGameOver] = useState(false)
   const [gameWinner, setWinner] = useState("")
+  const [stats, setStats] = useState()
   
-  const handleBoxClick = (boxPos) => {
+  const handleBoxClick = async (boxPos) => {
 
     const updatedBoard = board.map((val, i) => {
       if (i === boxPos) {
@@ -38,17 +40,32 @@ function App() {
     const won = checkWinner(updatedBoard)
 
     if (won) {
+      let winner 
+      let loser
       if (won === 'lukeimage'){
+        winner = 1
+        loser = 2
         let {lukeScore} = score;
         lukeScore += 1
         setScore({...score, lukeScore})
         setWinner('luke')
       } else {
+        winner = 2
+        loser = 1
         let {domScore} = score;
         domScore += 1
         setScore({...score, domScore})
         setWinner('dom')
       }
+      const result = {winner, loser}
+      const fetchResult = await fetch("http://localhost:8081/insertgame", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result)
+      });
+      console.log("fetch result", fetchResult)
     }
 
     setBoard(updatedBoard);
@@ -79,6 +96,7 @@ function App() {
       <Board board={board} onClick={gameOver ? resetBoard : handleBoxClick} />
       <ResetButton resetBoard={resetBoard} />
       <Popup gameWinner={gameWinner}/>
+      <StatsBoard />
     </div>
   );
 }
