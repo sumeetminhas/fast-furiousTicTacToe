@@ -2,11 +2,14 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const util = require("util");
+const { stat } = require('fs');
 
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -14,12 +17,15 @@ const db = mysql.createConnection({
     database: 'fastfurious'
 })
 
+const query = util.promisify(db.query).bind(db);
+
 app.get('/', (req, res) => {
     return res.json("from server")
 })
 
 /**
  * task 1: insert game result into player table
+ * task 2: update player table with wins&losses
  */ 
 app.post('/insertgame', async (req, res) => {
     try {
@@ -33,27 +39,20 @@ app.post('/insertgame', async (req, res) => {
     }
 })
 
-//     db.query(sql, async (err, data) => {
-//         const updateLuke = 
-//         const updateDom = 
-//         db.query(updateLuke, async (err, data)=> {
-//             if (err) return res.json(err);
-//             // return res.json(data);
-//             db.query(updateDom, async (err, data) => {
-//                 if (err) return res.json(err)
-//             })
-//         })
-//         console.log("err", err, "data", data)
-//         if (err) return res.json(err);
-//         return res.json(data);
-//     })
-// })
-
-/**
- * task 2: update player table with wins&losses
-
- */
-
+app.get('/fetchStats', async (req, res) => {
+    try {
+        // const statsQuery = await db.query(`SELECT * from player`, (err, result, field) => {
+        //     console.log("result", result)
+        //     return res.json(JSON.stringify(result))
+        // }) 
+        const statsQuery = await query(`SELECT * from player`)
+        console.log("stats", statsQuery)
+        return res.json(statsQuery)
+    } catch (err) {
+        console.error("error", err)
+        if (err) return res.json(err)
+    }
+})
 
 app.listen(8081, () => {
     console.log("listening on port 8081")

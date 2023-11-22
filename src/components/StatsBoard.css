@@ -1,0 +1,7 @@
+.statsboard {
+    display: flex;
+    font-size: 2em;
+    color:black;
+    justify-content: space-around;
+    border-color: black;
+}

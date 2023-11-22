@@ -1,11 +1,16 @@
 import React from "react";
+import "./StatsBoard.css"
 
-export const StatsBoard = (stats, currentPlayer) => {
-        const {domStats, lukeStats} = stats;
+export const StatsBoard = ({ stats }) => {
     return (
         <div className="statsboard">
-            <span>luke stats {lukeStats} </span>
-            <span>dom stats {domStats} </span>
+            {stats?.map(stat => 
+                <div className="stat">
+                    Name: {stat.player_name}
+                    Wins: {stat.Wins}
+                    Losses: {stat.Losses}
+                </div>
+                )}
         </div>
     )
 

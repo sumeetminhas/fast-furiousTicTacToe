@@ -1,7 +1,7 @@
 
 import './App.css';
 import {Board} from "./components/Board"
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { ScoreBoard } from './components/ScoreBoard';
 import { ResetButton } from './components/resetButton';
 import { Popup } from "./components/Popup";
@@ -88,7 +88,26 @@ function App() {
     setGameOver(false);
     setBoard(Array(9).fill(null))
     setWinner("")
+    fetchStats()
   }
+
+const fetchStats = async() => {
+  const fetchData = await fetch("http://localhost:8081/fetchStats", {
+    method: "GET",
+    headers:  {
+      "Content-Type": "application/json",
+    }
+  })
+  if (fetchData.status===200) {
+    const data = await fetchData.json()
+  console.log("data", data)
+  setStats(data)
+  }
+}
+
+useEffect(() => {
+  fetchStats()
+}, [])
 
   return (
     <div className="App">
@@ -96,7 +115,7 @@ function App() {
       <Board board={board} onClick={gameOver ? resetBoard : handleBoxClick} />
       <ResetButton resetBoard={resetBoard} />
       <Popup gameWinner={gameWinner}/>
-      <StatsBoard />
+      <StatsBoard stats={stats} />
     </div>
   );
 }
